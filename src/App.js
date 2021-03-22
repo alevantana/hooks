@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const [intervalCallCount, setIntervalCallCount] = useState(0);
+  const [isIntervalActive, setIntervalActive] = useState(false);
+
+  function intervalCallback() {
+    setIntervalCallCount(intervalCallCount + 1);
+  }
+
+  useEffect(() => {
+    let interval = null
+    if (isIntervalActive) {
+      interval = setInterval(intervalCallback, 1000)
+    }
+
+    return function cleanup() {
+      if(interval) {
+        clearInterval(interval)
+      }
+    }
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={() => setIntervalActive(true)}>Start interval</button>
+      <button onClick={() => setIntervalActive(false)}>Stop interval</button>
+      {" "}
+      {intervalCallCount}
     </div>
   );
 }
