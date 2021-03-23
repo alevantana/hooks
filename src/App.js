@@ -4,23 +4,21 @@ import './App.css';
 function App() {
   const [intervalCallCount, setIntervalCallCount] = useState(0);
   const [isIntervalActive, setIntervalActive] = useState(false);
-
-  function intervalCallback() {
-    setIntervalCallCount(intervalCallCount + 1);
-  }
-
+  
   useEffect(() => {
-    let interval = null
+    let id = null
+    
     if (isIntervalActive) {
-      interval = setInterval(intervalCallback, 1000)
-    }
+      id = setInterval(() => setIntervalCallCount(c => c + 1), 1000)
+    } 
 
     return function cleanup() {
-      if(interval) {
-        clearInterval(interval)
+      if(id) {
+        clearInterval(id)
       }
     }
-  });
+
+  }, [isIntervalActive]);
 
   return (
     <div>
